@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+{% load static %}
+
+<link href="{% static 'admin/css/homepage.css' %}" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Iceland" rel="stylesheet">
+<link rel="shortcut icon" href="{% static "admin/img/gis/favicon.ico" %}" type="image/x-icon">
+
+<title>Miami | Clubs</title>
+
+<div class="Club">
+  {% for name, date, url, day, month, format in E11even %}
+    <p class="event-format">{{format}}</p>
+    <p class="event-name">{{name}}</p>
+    <p class="event-day">{{day}} - <a href="{{url}}" target="_blank">Buy Tickets</a></p>
+  {% endfor %}
+</div>
+
