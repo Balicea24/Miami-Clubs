@@ -25,7 +25,6 @@ html {
   width:100%;
   height: 100%;
   margin-top: 4%;
-  left: 45%;
 }
 
 .container p {
@@ -59,7 +58,6 @@ html {
 
 .container img {
   position: relative;
-  left: -8.7%;
   height: 25%;
   width: 25%;
   padding-bottom: 2%;
@@ -119,28 +117,31 @@ html {
   color: #f0f0f0;
 }
 
-@media (max-width: 650px) {
+@media (max-width: 1024px) {
   .container {
     position: relative;
     transform: translateY(20%);
-    left: 38%;
+  }
+
+  .container p {
+    padding-bottom: 1.5%;
+    font-size: 1.5em;
   }
 
   .container img {
     position: relative;
-    left: -23%;
-    height: 75%;
-    width: 75%;
+    height: 50%;
+    width: 50%;
     padding-bottom: 2%
   }
 
   .Club {
     margin-left: -20%;
+    font-size: 2em;
   }
 
   .event-format {
-    font-size: 2em;
-    width: 15.5%;
+    width: 20.5%;
     left: 0%;
     border-right: 0px;
     border-bottom: 1px solid;
@@ -152,16 +153,16 @@ html {
     margin-left: 0%;
     margin-bottom: 0.9%;
     word-wrap: break-word;
-    width: 470px;
-    padding-bottom: 10px;
+    width: 950px;
+    padding-bottom: 0.1%;
+    padding-top: 1%;
   }
 
   .event-day {
     position: relative;
     padding-bottom: 20px;
     margin-left: 0%;
-    margin-top: 2.7%;
-    transform: translateY(20%);
+    padding-top: 2%;
   }
 }
 

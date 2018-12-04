@@ -1,7 +1,6 @@
 from django.contrib import admin
 from django.urls import path
 from events import views
-clubs = ["Space", "Treehouse"]
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -12,5 +11,5 @@ urlpatterns = [
     path('Story/', views.story, name='story'),
     path('LIV/', views.liv, name='liv'),
     path('E11even/', views.e11even, name='e11even'),
-    path('DoNotSitOnTheFurniture/', views.donotsitonthefurniture, name='donotsitonthefurniture')
+    path('DoNotSitOnTheFurniture/', views.donotsitonthefurniture, name='donotsitonthefurniture'),
 ]
