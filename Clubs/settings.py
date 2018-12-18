@@ -21,7 +21,7 @@ SECRET_KEY = 'baye-n^y@uq2v%6n2a+cu0^@)r)66(r)a0zzj#3g+%k41p^fyn'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.1.2']
+ALLOWED_HOSTS = []
 
 
 # Application definition

@@ -97,16 +97,16 @@ class Treehouse(Clubs):
         self.insertInfo(clubName)
 
     def info(self, soup):
-        year = time.strftime("%Y")
+        year = str(time.strftime("%Y"))
         tags = soup.find_all('div', attrs = {'class' : 'list-card-v2 l-mar-top-2 js-d-poster'})
         for count, tag in enumerate(tags):
             dateInfo = tag.find('time', attrs = {'list-card__date'}).text.strip().split(" ")
-            day = self.normalizeDay(dateInfo[2].strip())
-            month = self.getMonth(dateInfo[1])[1]
+            day = str(self.normalizeDay(dateInfo[2].strip()))
+            month = str(self.getMonth(dateInfo[1])[1])
 
             if count > 1:
                 if abs(int(month) - int(self.eventDate[count - 1][4:6])) > 9:
-                    year = int(time.strftime("%Y")) + 1
+                    year = str(int(time.strftime("%Y")) + 1)
 
                 if int(year + month + day) < int(self.eventDate[count - 1]):
                     break

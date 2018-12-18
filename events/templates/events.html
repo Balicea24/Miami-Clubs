@@ -5,10 +5,10 @@
 <link href="https://fonts.googleapis.com/css?family=Iceland" rel="stylesheet">
 <link rel="shortcut icon" href="{% static "admin/img/gis/favicon.ico" %}" type="image/x-icon">
 
-<title>Space</title>
+<title>{{clubName}}</title>
 
 <div class="Club">
-  {% for name, date, url, day, month, format in Space %}
+  {% for name, date, url, day, month, format in events %}
     <p class="event-format">{{format}}</p>
     <p class="event-name">{{name}}</p>
     <p class="event-day">{{day}} - <a href="{{url}}" target="_blank">Buy Tickets</a></p>

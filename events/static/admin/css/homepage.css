@@ -57,6 +57,7 @@ html {
 }
 
 .container img {
+  image-rendering: auto;
   position: relative;
   height: 25%;
   width: 25%;
