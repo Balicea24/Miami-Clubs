@@ -212,9 +212,9 @@ def getInfo(club):
 
 def sendMail(path, errorMsg):
     # Email info left blank for privacy
-    email = 'aliceabryan24@gmail.com'
-    password = 'Brjeed24!'
-    send_to_email = 'aliceabryan24@yahoo.com'
+    email = ''
+    password = ''
+    send_to_email = ''
     subject = 'Runtime Error'
     message = "Error: " + str(errorMsg)
     file_location = path + "/ErrorLog.txt"
