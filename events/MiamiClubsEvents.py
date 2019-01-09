@@ -1,14 +1,22 @@
 from bs4 import BeautifulSoup
 from urllib.request import Request, urlopen
 import time
+import datetime
 import calendar
 import sys
 import inspect
 from xlwt import Workbook
 import os
 import xlrd
+import logging
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from email.mime.base import MIMEBase
+from email import encoders
 
 class Clubs:
+    # Creates a skeleton class for all club classes to inherit
     def __init__(self):
         self.eventName = []
         self.eventDate = []
@@ -49,7 +57,7 @@ class Clubs:
 
 class Space(Clubs):
     def getUrl(self, clubName):
-        self.info(BeautifulSoup(urlopen('https://www.clubspace.com/events/'), "html.parser"))
+        self.info(BeautifulSoup(urlopen('https://www.clubspace.com/events/'), 'lxml'))
         self.insertInfo(clubName)
 
     def info(self, soup):
@@ -93,7 +101,7 @@ class Space(Clubs):
 
 class Treehouse(Clubs):
     def getUrl(self, clubName):
-        self.info(BeautifulSoup(urlopen('https://www.eventbrite.com/o/treehouse-miami-17386576012'), "html.parser"))
+        self.info(BeautifulSoup(urlopen('https://www.eventbrite.com/o/treehouse-miami-17386576012'), 'lxml'))
         self.insertInfo(clubName)
 
     def info(self, soup):
@@ -120,7 +128,7 @@ class Treehouse(Clubs):
 
 class ElectricPickle(Clubs):
     def getUrl(self, clubName):
-        self.info(BeautifulSoup(urlopen(Request('https://www.residentadvisor.net/club.aspx?id=9993', headers = {'User-Agent': 'Mozilla/5.0'})), 'html.parser'))
+        self.info(BeautifulSoup(urlopen(Request('https://www.residentadvisor.net/club.aspx?id=9993', headers = {'User-Agent': 'Mozilla/5.0'})), 'lxml'))
         self.insertInfo(clubName)
 
     def info(self, soup):
@@ -140,7 +148,7 @@ class ElectricPickle(Clubs):
 
 class Story(Clubs):
     def getUrl(self, clubName):
-        self.info(BeautifulSoup(urlopen('https://www.tixr.com/groups/story/events'), "html.parser"))
+        self.info(BeautifulSoup(urlopen('https://www.tixr.com/groups/story/events'), 'lxml'))
         self.insertInfo(clubName)
 
     def info(self, soup):
@@ -171,27 +179,21 @@ class Story(Clubs):
 
 class LIV(Story):
     def getUrl(self, clubName):
-        super().info(BeautifulSoup(urlopen('https://www.tixr.com/groups/liv/events'), "html.parser"))
+        super().info(BeautifulSoup(urlopen('https://www.tixr.com/groups/liv/events'), 'lxml'))
         self.insertInfo(clubName)
 
 class E11even(Story):
     def getUrl(self, clubName):
-        super().info(BeautifulSoup(urlopen('https://www.tixr.com/groups/11miami/events/'), "html.parser"))
+        super().info(BeautifulSoup(urlopen('https://www.tixr.com/groups/11miami/events/'), 'lxml'))
         self.insertInfo(clubName)
 
 class DoNotSitOnTheFurniture(ElectricPickle):
     def getUrl(self, clubName):
-        super().info(BeautifulSoup(urlopen(Request("https://www.residentadvisor.net/club.aspx?id=80115", headers = {'User-Agent': 'Mozilla/5.0'})), 'html.parser'))
+        super().info(BeautifulSoup(urlopen(Request("https://www.residentadvisor.net/club.aspx?id=80115", headers = {'User-Agent': 'Mozilla/5.0'})), 'lxml'))
         self.insertInfo(clubName)
 
-if __name__ == '__main__':
-    wb = Workbook()
-    clsmembers = inspect.getmembers(sys.modules[__name__], lambda member: inspect.isclass(member) and member.__module__ == __name__ and 'info' in dir(member))
-    list(map(lambda club: eval(club)().getUrl(club), [club[0] for club in clsmembers]))
-    current_dir = os.path.dirname(os.path.realpath(__file__))
-    wb.save(str(current_dir) + '/ClubsInfo.xls')
-
 def getInfo(club):
+    # Returns the data in the excel sheet for a specific club
     path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'ClubsInfo.xls')
     book = xlrd.open_workbook(path, 'r')
     sheet = book.sheet_by_name(club)
@@ -207,3 +209,51 @@ def getInfo(club):
             events[-1].append(type.value)
 
     return events
+
+def sendMail(path, errorMsg):
+    # Email info left blank for privacy
+    email = 'aliceabryan24@gmail.com'
+    password = 'Brjeed24!'
+    send_to_email = 'aliceabryan24@yahoo.com'
+    subject = 'Runtime Error'
+    message = "Error: " + str(errorMsg)
+    file_location = path + "/ErrorLog.txt"
+
+    msg = MIMEMultipart()
+    msg['From'] = email
+    msg['To'] = send_to_email
+    msg['Subject'] = subject
+
+    msg.attach(MIMEText(message, 'plain'))
+
+    filename = os.path.basename(file_location)
+    attachment = open(file_location, "rb")
+    part = MIMEBase('application', 'octet-stream')
+    part.set_payload((attachment).read())
+    encoders.encode_base64(part)
+    part.add_header('Content-Disposition', "attachment; filename= %s" % filename)
+
+    msg.attach(part)
+
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server.starttls()
+    server.login(email, password)
+    text = msg.as_string()
+    server.sendmail(email, send_to_email, text)
+    server.quit()
+
+if __name__ == '__main__':
+    current_dir = os.path.dirname(os.path.realpath(__file__))
+    try:
+        # Scrape all websites and save the data in an excel sheet
+        wb = Workbook()
+        clsmembers = inspect.getmembers(sys.modules[__name__], lambda member: inspect.isclass(member) and member.__module__ == __name__ and 'info' in dir(member))
+        list(map(lambda club: eval(club)().getUrl(club), [club[0] for club in clsmembers]))
+        wb.save(str(current_dir) + '/ClubsInfo.xls')
+
+    except Exception as e:
+        # Logs the error in a text file and sends a notification email
+        f = open(current_dir + "/ErrorLog.txt", "r+")
+        keepData = f.read()
+        f.write(str(e) + "\n" + str(datetime.datetime.now()) + "\n\n")
+        sendMail(current_dir, e)
