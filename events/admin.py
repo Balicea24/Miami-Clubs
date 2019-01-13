@@ -1,3 +1,7 @@
 from django.contrib import admin
+from .models import UserIP
 
-# Register your models here.
+class UserIPAdmin(admin.ModelAdmin):
+	list_display = ('ip_address',)
+
+admin.site.register(UserIP, UserIPAdmin)
