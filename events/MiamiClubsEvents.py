@@ -210,14 +210,14 @@ def getInfo(club):
 
     return events
 
-def sendMail(path, errorMsg):
+def sendMail(path, msg, successOrError):
     # Email info left blank for privacy
-    email = 'aliceabryan24@gmail.com'
-    password = 'Brjeed24!'
-    send_to_email = 'aliceabryan24@yahoo.com'
-    subject = 'Runtime Error'
-    message = "Error: " + str(errorMsg)
-    file_location = path + "/ErrorLog.txt"
+    email = ''
+    password = ''
+    send_to_email = ''
+    subject = successOrError
+    message = str(msg)
+    file_location = path + "/Log.txt"
 
     msg = MIMEMultipart()
     msg['From'] = email
@@ -244,16 +244,22 @@ def sendMail(path, errorMsg):
 
 if __name__ == '__main__':
     current_dir = os.path.dirname(os.path.realpath(__file__))
+    f = open(current_dir + "/Log.txt", "r+")
+    keepData = f.read()
     try:
         # Scrape all websites and save the data in an excel sheet
+        start_time = time.time()
         wb = Workbook()
         clsmembers = inspect.getmembers(sys.modules[__name__], lambda member: inspect.isclass(member) and member.__module__ == __name__ and 'info' in dir(member))
         list(map(lambda club: eval(club)().getUrl(club), [club[0] for club in clsmembers]))
         wb.save(str(current_dir) + '/ClubsInfo.xls')
 
+        # Logs the successful completion of the program and sends a notification email
+        completionMsg = "Program executed successfully in %s seconds" % (time.time() - start_time)
+        f.write(completionMsg + "\n" + str(datetime.datetime.now()) + "\n\n")
+        sendMail(current_dir, completionMsg, "Success")
+
     except Exception as e:
         # Logs the error in a text file and sends a notification email
-        f = open(current_dir + "/ErrorLog.txt", "r+")
-        keepData = f.read()
         f.write(str(e) + "\n" + str(datetime.datetime.now()) + "\n\n")
-        sendMail(current_dir, e)
+        sendMail(current_dir, e, "Runtime Error")
