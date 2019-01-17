@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup
-from urllib.request import Request, urlopen
+import requests
 import time
 import datetime
 import calendar
@@ -8,7 +8,6 @@ import inspect
 from xlwt import Workbook
 import os
 import xlrd
-import logging
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -57,7 +56,7 @@ class Clubs:
 
 class Space(Clubs):
     def getUrl(self, clubName):
-        self.info(BeautifulSoup(urlopen('https://www.clubspace.com/events/'), 'lxml'))
+        self.info(BeautifulSoup(requests.get('https://www.clubspace.com/events/').text, 'lxml'))
         self.insertInfo(clubName)
 
     def info(self, soup):
@@ -101,7 +100,7 @@ class Space(Clubs):
 
 class Treehouse(Clubs):
     def getUrl(self, clubName):
-        self.info(BeautifulSoup(urlopen('https://www.eventbrite.com/o/treehouse-miami-17386576012'), 'lxml'))
+        self.info(BeautifulSoup(requests.get('https://www.eventbrite.com/o/treehouse-miami-17386576012').text, 'lxml'))
         self.insertInfo(clubName)
 
     def info(self, soup):
@@ -128,7 +127,7 @@ class Treehouse(Clubs):
 
 class ElectricPickle(Clubs):
     def getUrl(self, clubName):
-        self.info(BeautifulSoup(urlopen(Request('https://www.residentadvisor.net/club.aspx?id=9993', headers = {'User-Agent': 'Mozilla/5.0'})), 'lxml'))
+        self.info(BeautifulSoup(requests.get('https://www.residentadvisor.net/club.aspx?id=9993').text, 'lxml'))
         self.insertInfo(clubName)
 
     def info(self, soup):
@@ -148,7 +147,7 @@ class ElectricPickle(Clubs):
 
 class Story(Clubs):
     def getUrl(self, clubName):
-        self.info(BeautifulSoup(urlopen('https://www.tixr.com/groups/story/events'), 'lxml'))
+        self.info(BeautifulSoup(requests.get('https://www.tixr.com/groups/story/events').text, 'lxml'))
         self.insertInfo(clubName)
 
     def info(self, soup):
@@ -179,17 +178,17 @@ class Story(Clubs):
 
 class LIV(Story):
     def getUrl(self, clubName):
-        super().info(BeautifulSoup(urlopen('https://www.tixr.com/groups/liv/events'), 'lxml'))
+        super().info(BeautifulSoup(requests.get('https://www.tixr.com/groups/liv/events').text, 'lxml'))
         self.insertInfo(clubName)
 
 class E11even(Story):
     def getUrl(self, clubName):
-        super().info(BeautifulSoup(urlopen('https://www.tixr.com/groups/11miami/events/'), 'lxml'))
+        super().info(BeautifulSoup(requests.get('https://www.tixr.com/groups/11miami/events/').text, 'lxml'))
         self.insertInfo(clubName)
 
 class DoNotSitOnTheFurniture(ElectricPickle):
     def getUrl(self, clubName):
-        super().info(BeautifulSoup(urlopen(Request("https://www.residentadvisor.net/club.aspx?id=80115", headers = {'User-Agent': 'Mozilla/5.0'})), 'lxml'))
+        super().info(BeautifulSoup(requests.get("https://www.residentadvisor.net/club.aspx?id=80115").text, 'lxml'))
         self.insertInfo(clubName)
 
 def getInfo(club):
@@ -212,9 +211,9 @@ def getInfo(club):
 
 def sendMail(path, msg, successOrError):
     # Email info left blank for privacy
-    email = ''
-    password = ''
-    send_to_email = ''
+    email = 'aliceabryan24@gmail.com'
+    password = 'Roflmao25'
+    send_to_email = 'aliceabryan24@yahoo.com'
     subject = successOrError
     message = str(msg)
     file_location = path + "/Log.txt"
@@ -257,9 +256,11 @@ if __name__ == '__main__':
         # Logs the successful completion of the program and sends a notification email
         completionMsg = "Program executed successfully in %s seconds" % (time.time() - start_time)
         f.write(completionMsg + "\n" + str(datetime.datetime.now()) + "\n\n")
+        f.close()
         sendMail(current_dir, completionMsg, "Success")
 
     except Exception as e:
         # Logs the error in a text file and sends a notification email
         f.write(str(e) + "\n" + str(datetime.datetime.now()) + "\n\n")
+        f.close()
         sendMail(current_dir, e, "Runtime Error")

@@ -1,0 +1,64 @@
+name 'urlopen' is not defined
+2019-01-13 22:51:28.612477
+
+name 'urlopen' is not defined
+2019-01-13 22:52:07.455271
+
+Program executed successfully in 42.21726989746094 seconds
+2019-01-13 22:52:51.656309
+
+must be str, not bytes
+2019-01-13 22:52:52.046479
+
+Program executed successfully in 41.88607907295227 seconds
+2019-01-13 22:53:54.202204
+
+name 's' is not defined
+2019-01-13 22:53:54.202233
+
+
+Program executed successfully in 47.03577947616577 seconds
+2019-01-14 00:36:30.361839
+
+name 's' is not defined
+2019-01-14 00:36:30.361877
+
+t at 0x7f97524f0b00>?
+2019-01-14 00:35:44.107503
+
+Invalid URL '<urllib.request.Request object at 0x7f31bdb85b00>': No schema supplied. Perhaps you meant http://<urllib.request.Request object at 0x7f31bdb85b00>?
+2019-01-14 00:36:17.874645
+
+Invalid URL '<urllib.request.Request object at 0x7f7cfe077b00>': No schema supplied. Perhaps you meant http://<urllib.request.Request object at 0x7f7cfe077b00>?
+2019-01-14 00:36:38.254208
+
+name 'Request' is not defined
+2019-01-14 00:37:52.720116
+
+object of type 'Response' has no len()
+2019-01-14 00:37:54.745782
+
+object of type 'Response' has no len()
+2019-01-14 00:39:51.443418
+
+Program executed successfully in 44.83647012710571 seconds
+2019-01-14 01:13:58.628867
+
+Program executed successfully in 39.6593279838562 seconds
+2019-01-15 18:31:11.223139
+
+
+
+Program executed successfully in 44.29350423812866 seconds
+2019-01-15 18:36:12.460701
+
+(535, b'5.7.8 Username and Password not accepted. Learn more at\n5.7.8  https://support.google.com/mail/?p=BadCredentials q193sm5850304vsd.0 - gsmtp')
+2019-01-15 18:36:13.144887
+
+
+Program executed successfully in 44.50712704658508 seconds
+2019-01-15 18:38:36.882588
+
+(535, b'5.7.8 Username and Password not accepted. Learn more at\n5.7.8  https://support.google.com/mail/?p=BadCredentials l13sm77058336vka.16 - gsmtp')
+2019-01-15 18:38:32.020942
+

@@ -36,6 +36,7 @@ def client_ip(request):
     else:
         user = UserIP()
         user.ip_address = ip
+        user.host_name = request.get_host()
         user.last_visit = datetime.datetime.now()
         user.number_requests += 1
         user.save()
