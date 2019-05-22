@@ -13,6 +13,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
 from email import encoders
+from multiprocessing.dummy import Pool as ThreadPool
 
 class Clubs:
     # Creates a skeleton class for all club classes to inherit
@@ -151,7 +152,7 @@ class Story(Clubs):
         self.insertInfo(clubName)
 
     def info(self, soup):
-        tags = soup.find_all('a', attrs = {'alt' : True})
+        tags = soup.find_all('a', attrs = {'alt' : True, 'itemtype' : False})
         for tag in tags:
             dateInfo = tag.find_all('span')[2]['content'].split("-")
             year = dateInfo[0]
@@ -211,9 +212,9 @@ def getInfo(club):
 
 def sendMail(path, msg, successOrError):
     # Email info left blank for privacy
-    email = 'aliceabryan24@gmail.com'
-    password = 'Roflmao25'
-    send_to_email = 'aliceabryan24@yahoo.com'
+    email = ''
+    password = ''
+    send_to_email = ''
     subject = successOrError
     message = str(msg)
     file_location = path + "/Log.txt"
@@ -250,7 +251,8 @@ if __name__ == '__main__':
         start_time = time.time()
         wb = Workbook()
         clsmembers = inspect.getmembers(sys.modules[__name__], lambda member: inspect.isclass(member) and member.__module__ == __name__ and 'info' in dir(member))
-        list(map(lambda club: eval(club)().getUrl(club), [club[0] for club in clsmembers]))
+        pool = ThreadPool(7)
+        list(pool.map(lambda club: eval(club)().getUrl(club), [club[0] for club in clsmembers]))
         wb.save(str(current_dir) + '/ClubsInfo.xls')
 
         # Logs the successful completion of the program and sends a notification email
@@ -260,7 +262,7 @@ if __name__ == '__main__':
         sendMail(current_dir, completionMsg, "Success")
 
     except Exception as e:
-        # Logs the error in a text file and sends a notification email
+        # Logs the error and sends a notification email
         f.write(str(e) + "\n" + str(datetime.datetime.now()) + "\n\n")
         f.close()
         sendMail(current_dir, e, "Runtime Error")
